@@ -26,8 +26,14 @@ df_test = pd.read_csv('../input/Sentiment Analysis on Movie Reviews/test.tsv', s
 # this should help you to decide whether to use STOP WORDS or not.
 # This part of code is just great analytical tool
 stop_word = set(stopwords.words('english'))
-word_vectorizer = CountVectorizer(ngram_range=(1, 1), analyzer='word', min_df=0.001)
+word_vectorizer = CountVectorizer(ngram_range=(1, 1), analyzer='word', min_df=0.001)  # 词频向量  (n-gram_range: n-grams to be extracted.)
 sparse_matrix = word_vectorizer.fit_transform(df_test['Phrase'])
+
+
+print(sparse_matrix)
+
+import sys
+sys.exit(0)
 frequencies = sum(sparse_matrix).toarray()[0]
 freq = pd.DataFrame(frequencies, index=word_vectorizer.get_feature_names(), columns=['frequency'])
 freq.sort_values('frequency', ascending=False)
