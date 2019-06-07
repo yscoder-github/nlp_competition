@@ -1,7 +1,9 @@
-flyai
-tensorflow
+config
+chardet
+utils
 numpy
-jieba
+tensorflow
+flyai
 keras-applications
 keras-preprocessing
 tensorflow-hub
