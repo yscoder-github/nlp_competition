@@ -1,0 +1,45 @@
+---
+name: Reading Comprehesion Ch
+author: jiayi
+description: Reading Comprehesion Ch
+topic: Reading Comprehesion Ch
+algorithm: LSTM
+language: python3
+virtualenv: flyai_env/bin/
+
+framework: PyTorch
+
+data:
+  id: ReadingComprehesionCh
+  name: 中文阅读理解
+  category: nlp
+
+
+model:
+  processor: Processor
+  input_x: input_x
+  input_y: input_y
+  output_y: output_y
+  input:
+    columns:
+      - name: question
+        type: str
+      - name: answer
+        type: str
+    to_type: float
+    to_shape: [-1, 2]
+  output:
+    columns:
+      - name: label
+        type: int
+    to_type: int
+    to_shape: [-1,1]
+
+
+evaluate:
+  score: torch_accuracy
+
+servers:
+ - id: flyai
+   url: https://flyai.com
+...
