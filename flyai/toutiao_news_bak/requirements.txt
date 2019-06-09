@@ -1,0 +1,10 @@
+flyai
+tensorflow
+numpy
+jieba
+keras-applications
+keras-preprocessing
+tensorflow-hub
+scikit-learn
+jieba
+bert-tensorflow
