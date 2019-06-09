@@ -1,0 +1,70 @@
+---
+# 项目的名字
+name: SST
+# 项目的作者
+author: joaming
+# 项目的描述
+description: the stanford sentiment treebank
+# 项目的主题
+topic: the stanford sentiment treebank
+# 项目使用的网络j
+algorithm: bert
+language: python3
+virtualenv: flyai_env/bin/
+# 项目使用的框架
+framework: tensorflow
+
+# 使用的数据集
+data:
+  # 数据集id
+  # 该id为上传数据生成的id
+  # 通过该id下载可以对应的数据集
+  id: SST
+  name: the stanford sentiment treebank
+  category: nlp
+
+# 数据模型
+model:
+  # 数据处理类
+  # 通过python的反射，生成该对象
+  processor: Processor
+  # 输入x数据处理的方法
+  # 通过反射调用，可以修改名字
+  input_x: input_x
+  # 输入y数据处理的方法
+  # 通过反射调用，可以修改名字
+  input_y: input_y
+  # 模型输出y数据处理的方法
+  # 通过反射调用，可以修改名字
+  output_y: output_y
+  # 模型用到的输入x字段
+  # 在processor.py的input_x方法中体现
+  input:
+    columns:
+      - name: sentence
+        type: string
+    # 最终转换的数据类型
+    to_type: ind
+    # 最终转换的数据纬度
+    to_shape:
+
+  # 模型用到的输入y字段
+  # 在processor.py的input_y方法中体现
+  output:
+    columns:
+      - name: label
+        type: int
+    # 最终转换的数据类型
+    to_type: int
+    # 最终转换的数据纬度
+    to_shape:
+
+# 验证使用的python文件
+evaluate:
+  score: tensorflow_accuracy
+
+# 使用离线训练的服务器
+servers:
+  - id: flyai
+    url: https://flyai.com
+...
