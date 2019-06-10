@@ -161,8 +161,8 @@ class SQLNet(nn.Module):
         sigm = nn.Sigmoid()
         sel_col_prob = sigm(sel_score)
         bce_loss = -torch.mean(
-            3*(sel_col_truth_var * torch.log(sel_col_prob+1e-10)) +
-            (1-sel_col_truth_var) * torch.log(1-sel_col_prob+1e-10)
+            3 * (sel_col_truth_var * torch.log(sel_col_prob + 1e-10)) +
+            (1-sel_col_truth_var) * torch.log(1-sel_col_prob + 1e-10)
         )
         loss += bce_loss
 

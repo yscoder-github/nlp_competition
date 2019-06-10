@@ -1,2 +1,7 @@
 /input/*
+*.txt
 .idea/*
+*.csv
+*.zip
+*.pack
+

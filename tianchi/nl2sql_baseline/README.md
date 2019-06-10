@@ -1,3 +1,5 @@
+## More Intro https://new.qq.com/rain/a/20190602A089LI
+
 ## Introduction
 
 This baseline method is developed and refined based on <a href="https://github.com/xiaojunxu/SQLNet">code</a> of <a href="https://arxiv.org/abs/1711.04436">SQLNet</a>, which is a baseline model in <a href="https://github.com/salesforce/WikiSQL">WikiSQL</a>.

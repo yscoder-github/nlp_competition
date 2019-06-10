@@ -108,8 +108,8 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data):
     model.train()
     perm=np.random.permutation(len(sql_data))
     cum_loss = 0.0
-    for st in tqdm(range(len(sql_data)//batch_size+1)):
-        ed = (st+1)*batch_size if (st+1)*batch_size < len(perm) else len(perm)
+    for st in tqdm(range(len(sql_data) // batch_size+1)):
+        ed = (st + 1) * batch_size if (st + 1) * batch_size < len(perm) else len(perm)
         st = st * batch_size
         q_seq, gt_sel_num, col_seq, col_num, ans_seq, gt_cond_seq = to_batch_seq(sql_data, table_data, perm, st, ed)
         # q_seq: char-based sequence of question

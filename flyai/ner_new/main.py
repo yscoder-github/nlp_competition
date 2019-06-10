@@ -100,10 +100,6 @@ with tf.Session() as sess:
     for i in range(dataset.get_step()):
         x_train, y_train, x_test, y_test = dataset.next_batch(args.BATCH)
 
-        
-        
-
-
         max_sentenc_length = max(map(len, x_train))
         sequence_len = np.asarray([len(x) for x in x_train])
         # padding
@@ -111,7 +107,7 @@ with tf.Session() as sess:
         y_train = np.asarray([list(y[:]) + (max_sentenc_length - len(y)) * [TAGS_NUM - 1] for y in y_train])
         res,loss_,_= sess.run([merged, net.loss, net.train_op], feed_dict={net.input: x_train, net.label: y_train, net.seq_length: sequence_len})
         print('steps:{}loss:{}'.format(i, loss_))
-        writer.add_summary(res, i)  # 将日志数据写入文件
+        writer.add_summary(res, i)  # write log into file 
         if i % 50 == 0:
             modelpp.save_model(sess, MODEL_PATH, overwrite=True)
 
