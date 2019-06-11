@@ -49,6 +49,66 @@ class NER_net:
         self.seq_length = tf.placeholder(tf.int32, shape=[None], name="max_sequence_in_batch")
         self._build_net()
 
+    
+        def multihead_attn(queries, keys, q_masks, k_masks, num_units=None, num_heads=8,
+                        dropout_rate=DROPOUT_RATE, future_binding=False, reuse=False, activation=None):
+            """
+            Args:
+            queries: A 3d tensor with shape of [N, T_q, C_q]
+            keys: A 3d tensor with shape of [N, T_k, C_k]
+            """
+            if num_units is None:
+                num_units = queries.get_shape().as_list[-1]
+            T_q = queries.get_shape().as_list()[1]  # max time length of query
+            T_k = keys.get_shape().as_list()[1]  # max time length of key
+
+            Q = tf.layers.dense(queries, num_units, activation, reuse=reuse, name='Q')  # (N, T_q, C)
+            K_V = tf.layers.dense(keys, 2 * num_units, activation, reuse=reuse, name='K_V')
+            K, V = tf.split(K_V, 2, -1)
+
+            Q_ = tf.concat(tf.split(Q, num_heads, axis=2), axis=0)  # (h*N, T_q, C/h)
+            K_ = tf.concat(tf.split(K, num_heads, axis=2), axis=0)  # (h*N, T_k, C/h)
+            V_ = tf.concat(tf.split(V, num_heads, axis=2), axis=0)  # (h*N, T_k, C/h)
+
+            # Scaled Dot-Product
+            align = tf.matmul(Q_, tf.transpose(K_, [0, 2, 1]))  # (h*N, T_q, T_k)
+            align = align / np.sqrt(K_.get_shape().as_list()[-1])  # scale
+
+            # Key Masking
+            paddings = tf.fill(tf.shape(align), float('-inf'))  # exp(-large) -> 0
+
+            key_masks = k_masks  # (N, T_k)
+            key_masks = tf.tile(key_masks, [num_heads, 1])  # (h*N, T_k)
+            key_masks = tf.tile(tf.expand_dims(key_masks, 1), [1, T_q, 1])  # (h*N, T_q, T_k)
+            align = tf.where(tf.equal(key_masks, 0), paddings, align)  # (h*N, T_q, T_k)
+
+            if future_binding:
+                lower_tri = tf.ones([T_q, T_k])  # (T_q, T_k)
+                lower_tri = tf.linalg.LinearOperatorLowerTriangular(lower_tri).to_dense()  # (T_q, T_k)
+                masks = tf.tile(tf.expand_dims(lower_tri, 0), [tf.shape(align)[0], 1, 1])  # (h*N, T_q, T_k)
+                align = tf.where(tf.equal(masks, 0), paddings, align)  # (h*N, T_q, T_k)
+
+            # Softmax
+            align = tf.nn.softmax(align)  # (h*N, T_q, T_k)
+
+            # Query Masking
+            query_masks = tf.to_float(q_masks)  # (N, T_q)
+            query_masks = tf.tile(query_masks, [num_heads, 1])  # (h*N, T_q)
+            query_masks = tf.tile(tf.expand_dims(query_masks, -1), [1, 1, T_k])  # (h*N, T_q, T_k)
+            align *= query_masks  # (h*N, T_q, T_k)
+
+            align = tf.layers.dropout(align, dropout_rate, training=(not reuse))  # (h*N, T_q, T_k)
+
+            # Weighted sum
+            outputs = tf.matmul(align, V_)  # (h*N, T_q, C/h)
+            # Restore shape
+            outputs = tf.concat(tf.split(outputs, num_heads, axis=0), axis=2)  # (N, T_q, C)
+            # Residual connection
+            outputs += queries  # (N, T_q, C)
+            # Normalize
+            outputs = layer_norm(outputs)  # (N, T_q, C)
+            return outputs
+
     def _build_net(self):
 
         # x: [batch_size, time_step, embedding_size], float32
