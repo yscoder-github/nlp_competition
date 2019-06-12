@@ -106,7 +106,7 @@ def to_batch_query(sql_data, idxes, st, ed):
 
 def epoch_train(model, optimizer, batch_size, sql_data, table_data):
     model.train()
-    perm=np.random.permutation(len(sql_data))
+    perm = np.random.permutation(len(sql_data))
     cum_loss = 0.0
     for st in tqdm(range(len(sql_data) // batch_size+1)):
         ed = (st + 1) * batch_size if (st + 1) * batch_size < len(perm) else len(perm)

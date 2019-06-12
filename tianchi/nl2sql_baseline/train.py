@@ -45,6 +45,9 @@ if __name__ == '__main__':
         use_small=use_small)
 
     word_emb = load_word_emb('data/char_embedding')
+
+
+
     model = SQLNet(word_emb,
                    N_word=n_word,
                    use_ca=args.ca,
