@@ -54,3 +54,32 @@ class AggPredictor(nn.Module):
         K_agg = (h_enc.unsqueeze(1) * att.unsqueeze(3)).sum(2)
         agg_score = self.agg_out(self.agg_out_K(K_agg) + self.col_out_col(col_emb)).squeeze()
         return agg_score
+
+
+
+
+
+
+class AggregatorTest(nn.Module):
+    def __init__(self, word_emb, N_word, N_h=100, N_depth=2,
+            gpu=False, use_ca=True, trainable_emb=False):
+        super(SQLNet, self).__init__()
+        self.use_ca = use_ca
+        self.trainable_emb = trainable_emb
+
+        self.gpu = gpu
+        self.N_h = N_h
+        self.N_depth = N_depth
+
+        self.max_col_num = 45
+        self.max_tok_num = 200
+        self.SQL_TOK = ['<UNK>', '<END>', 'WHERE', 'AND', 'OR', '==', '>', '<', '!=', '<BEG>']
+        self.COND_OPS = ['>', '<', '==', '!=']
+
+        #Predict aggregation functions of corresponding selected columns
+        self.agg_pred = AggPredictor(N_word, N_h, N_depth, use_ca=use_ca)
+
+
+agg_test = AggregatorTest()
+
+agg_test()
