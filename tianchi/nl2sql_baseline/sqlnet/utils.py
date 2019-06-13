@@ -2,6 +2,7 @@ import json
 from lib.dbengine import DBEngine
 import numpy as np
 from tqdm import tqdm
+import os 
 
 def load_data(sql_paths, table_paths, use_small=False):
     if not isinstance(sql_paths, list):
@@ -35,6 +36,7 @@ def load_data(sql_paths, table_paths, use_small=False):
     return ret_sql_data, table_data
 
 def load_dataset(toy=False, use_small=False, mode='train'):
+    """
     print "Loading dataset"
     dev_sql, dev_table = load_data('data/dev.json', 'data/dev.tables.json', use_small=use_small)
     dev_db = 'data/dev.db'
@@ -44,6 +46,27 @@ def load_dataset(toy=False, use_small=False, mode='train'):
         return train_sql, train_table, train_db, dev_sql, dev_table, dev_db
     elif mode == 'test':
         test_sql, test_table = load_data('data/test.json', 'data/test.tables.json', use_small=use_small)
+        test_db = 'data/test.db'
+        return dev_sql, dev_table, dev_db, test_sql, test_table, test_db
+    """
+
+
+
+    print "Loading dataset"
+    base_dir = '/media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql'
+    dev_sql, dev_table = load_data(os.path.join(base_dir, 'dev.json'),
+                                   os.path.join(base_dir, 'dev.tables.json'),
+                                   use_small=use_small)
+    dev_db = 'data/dev.db'
+    if mode == 'train':
+        train_sql, train_table = load_data(os.path.join(base_dir, 'train.json'),
+                                           os.path.join(base_dir, 'train.tables.json'), use_small=use_small)
+        train_db = 'data/train.db'
+        return train_sql, train_table, train_db, dev_sql, dev_table, dev_db
+    elif mode == 'test':
+        test_sql, test_table = load_data(os.path.join(base_dir, 'test.json'),
+                                         os.path.join(base_dir, 'test.tables.json'),
+                                         use_small=use_small)
         test_db = 'data/test.db'
         return dev_sql, dev_table, dev_db, test_sql, test_table, test_db
 
@@ -207,7 +230,7 @@ def epoch_acc(model, batch_size, sql_data, table_data):
 
 
 def load_word_emb(file_name):
-    print ('Loading word embedding from %s'%file_name)
+    print ('Loading word embedding from %s' % file_name)
     ret = {}
     with open(file_name) as inf:
         for idx, line in enumerate(inf):

@@ -79,7 +79,3 @@ class AggregatorTest(nn.Module):
         #Predict aggregation functions of corresponding selected columns
         self.agg_pred = AggPredictor(N_word, N_h, N_depth, use_ca=use_ca)
 
-
-agg_test = AggregatorTest()
-
-agg_test()

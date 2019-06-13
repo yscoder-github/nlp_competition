@@ -29,6 +29,12 @@ if __name__ == '__main__':
                         help='Path of save experiment log')
     args = parser.parse_args()
 
+
+
+    # for debug shuai 
+    args.ca = True
+    args.gpu = True
+    # debug end shuai 
     n_word = 300
     if args.toy:
         use_small = True
@@ -44,9 +50,8 @@ if __name__ == '__main__':
     train_sql, train_table, train_db, dev_sql, dev_table, dev_db = load_dataset(
         use_small=use_small)
 
-    word_emb = load_word_emb('data/char_embedding')
-
-
+    # word_emb = load_word_emb('data/char_embedding')
+    word_emb = load_word_emb('/media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/char_embedding')
 
     model = SQLNet(word_emb,
                    N_word=n_word,

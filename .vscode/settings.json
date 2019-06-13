@@ -1,7 +1,7 @@
 {
     "python.pythonPath": "/home/yinshuai/anaconda3/envs/python27/bin/python",
     "debug.console.fontSize": 9,
-    "terminal.integrated.fontSize": 11,
-    "markdown.preview.fontSize": 11,
+    "terminal.integrated.fontSize": 9,
+    "markdown.preview.fontSize": 9,
     "editor.fontSize": 9
 }
