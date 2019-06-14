@@ -129,9 +129,9 @@ def to_batch_query(sql_data, idxes, st, ed):
 
 def epoch_train(model, optimizer, batch_size, sql_data, table_data):
     model.train()
-    perm = np.random.permutation(len(sql_data))
+    perm = np.random.permutation(len(sql_data)) 
     cum_loss = 0.0
-    for st in tqdm(range(len(sql_data) // batch_size+1)):
+    for st in tqdm(range(len(sql_data) // batch_size + 1)):
         ed = (st + 1) * batch_size if (st + 1) * batch_size < len(perm) else len(perm)
         st = st * batch_size
         q_seq, gt_sel_num, col_seq, col_num, ans_seq, gt_cond_seq = to_batch_seq(sql_data, table_data, perm, st, ed)
@@ -141,7 +141,8 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data):
         # col_num: number of headers in one table
         # ans_seq: (sel, number of conds, sel list in conds, op list in conds)
         # gt_cond_seq: ground truth of conds
-        gt_where_seq = model.generate_gt_where_seq_test(q_seq, gt_cond_seq)
+        # gt_where_seq: record the start_pos and end_pos of where condition column in the question sequence 
+        gt_where_seq = model.generate_gt_where_seq_test(q_seq, gt_cond_seq) 
         gt_sel_seq = [x[1] for x in ans_seq]
         score = model.forward(q_seq, col_seq, col_num, gt_where=gt_where_seq, gt_cond=gt_cond_seq, gt_sel=gt_sel_seq, gt_sel_num=gt_sel_num)
         # sel_num_score, sel_col_score, sel_agg_score, cond_score, cond_rela_score
@@ -236,5 +237,5 @@ def load_word_emb(file_name):
         for idx, line in enumerate(inf):
             info = line.strip().split(' ')
             if info[0].lower() not in ret:
-                ret[info[0].decode('utf-8')] = np.array(map(lambda x:float(x), info[1:]))
+                ret[info[0].decode('utf-8')] = np.array(map(lambda x: float(x), info[1:]))
     return ret

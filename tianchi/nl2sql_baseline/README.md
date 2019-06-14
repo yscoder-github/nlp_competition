@@ -103,7 +103,7 @@ pip install tqdm
 
 5. Runing code 
 ```python 
-python train.py --ca --gpu 
+python train.py --ca --gpu   # must used --gpu param, otherwise it will throw some unexpected  errors 
 ``` 
 
 6. Data explore   
@@ -131,7 +131,7 @@ train.json文件中，每一行为一条数据样本。数据样例及字段说�
 ``` json 
 op_sql_dict = {0:">", 1:"<", 2:"==", 3:"!="}
 agg_sql_dict = {0:"", 1:"AVG", 2:"MAX", 3:"MIN", 4:"COUNT", 5:"SUM"}
-conn_sql_dict = {0:"and",1:"or",-1:""}
+conn_sql_dict = {0:"and",    1:"or",   -1:""}
 ``` 
 train.tables.json 文件中，每一行为一张表格数据。数据样例及字段说明例如下：
 ``` json 

@@ -56,23 +56,24 @@ class SQLNet(nn.Module):
     def generate_gt_where_seq_test(self, q, gt_cond_seq):
         ret_seq = []
         for cur_q, ans in zip(q, gt_cond_seq):
-            temp_q = u"".join(cur_q)
+            temp_q = u"".join(cur_q)  
             cur_q = [u'<BEG>'] + cur_q + [u'<END>']
             record = []
             record_cond = []
             for cond in ans:
+                # the given condition is not in question sequence 
                 if cond[2] not in temp_q:
                     record.append((False, cond[2]))
                 else:
                     record.append((True, cond[2]))
             for idx, item in enumerate(record):
                 temp_ret_seq = []
-                if item[0]:
+                if item[0]: 
                     temp_ret_seq.append(0)
-                    temp_ret_seq.extend(list(range(temp_q.index(item[1])+1,temp_q.index(item[1])+len(item[1])+1)))
-                    temp_ret_seq.append(len(cur_q)-1)
+                    temp_ret_seq.extend(list(range(temp_q.index(item[1]) + 1, temp_q.index(item[1]) + len(item[1]) + 1)))
+                    temp_ret_seq.append(len(cur_q) - 1)
                 else:
-                    temp_ret_seq.append([0,len(cur_q)-1])
+                    temp_ret_seq.append([0, len(cur_q) - 1])
                 record_cond.append(temp_ret_seq)
             ret_seq.append(record_cond)
         return ret_seq
