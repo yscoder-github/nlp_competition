@@ -12,3 +12,10 @@ Some metrics get on this competition: To Do
 
 
 ## FlyAi 
+
+
+## Semeval
+
+
+## ATEC
+
