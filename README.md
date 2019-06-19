@@ -8,14 +8,17 @@ Some metrics get on this competition: To Do
 
 
 ## TianChi 
+Todo
 
 
 
-## FlyAi 
+## FlyAi
+To do
+ 
 
 
 ## Semeval
-
+Todo
 
 ## ATEC
-
+Todo
