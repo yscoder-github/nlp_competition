@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import torch
 from sqlnet.utils import *
 from sqlnet.model.sqlnet import SQLNet
@@ -76,8 +77,10 @@ if __name__ == '__main__':
     for i in range(args.epoch):
         print 'Epoch %d' % (i + 1)
         # train on the train dataset
+        # train_sql: a json list treated from train.json 
+        # train_table: a dict treated from table.json 
         train_loss = epoch_train(model, optimizer, batch_size, train_sql,
-                                 train_table)
+                                 train_table) 
         # evaluate on the dev dataset
         dev_acc = epoch_acc(model, batch_size, dev_sql, dev_table)
         # accuracy of each sub-task

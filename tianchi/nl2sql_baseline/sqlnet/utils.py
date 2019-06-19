@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import json
 from lib.dbengine import DBEngine
 import numpy as np
@@ -75,30 +76,37 @@ def load_dataset(toy=False, use_small=False, mode='train'):
 
 
 def to_batch_seq(sql_data, table_data, idxes, st, ed, ret_vis_data=False):
+    '''
+        table_data: dict treat  from table.json 
+        sql_data: train data list treat from train.json
+    '''
     q_seq = []
     col_seq = []
     col_num = []
     ans_seq = []
     gt_cond_seq = []
     vis_seq = []
-    sel_num_seq = []
+    sel_num_seq = []  
     for i in range(st, ed):
-        sql = sql_data[idxes[i]]
-        sel_num = len(sql['sql']['sel'])
+        sql = sql_data[idxes[i]] 
+        sel_num = len(sql['sql']['sel']) # the column index to select from the table in current question 
         sel_num_seq.append(sel_num)
+        #conds_num:  query conditions such as:  "conds": [[0, 2, "大黄蜂"], [0, 2, "密室逃生"]]}}
         conds_num = len(sql['sql']['conds'])
+        # q_seq:[[u'结', u'构', u'化', u'金', u'融', u'手', u'册', u'的', u'主', u'要', u'内', u'容', u'是', u'什', ...] ...[]]
         q_seq.append([char for char in sql['question']])
+        # col_seq record table header 
         col_seq.append([[char for char in header]
                         for header in table_data[sql['table_id']]['header']])
-        col_num.append(len(table_data[sql['table_id']]['header']))
+        col_num.append(len(table_data[sql['table_id']]['header'])) 
         ans_seq.append((
             len(sql['sql']['agg']),
             sql['sql']['sel'],
             sql['sql']['agg'],
             conds_num,
-            tuple(x[0] for x in sql['sql']['conds']),
-            tuple(x[1] for x in sql['sql']['conds']),
-            sql['sql']['cond_conn_op'],
+            tuple(x[0] for x in sql['sql']['conds']), # x[0] is column index of conds 
+            tuple(x[1] for x in sql['sql']['conds']), # x[1] is conds type ,such as '=','>' .. 
+            sql['sql']['cond_conn_op'], # 条件之间的关系 conn_sql_dict = {0:"and",    1:"or",   -1:""}
         ))
         gt_cond_seq.append(sql['sql']['conds'])
         vis_seq.append(
@@ -160,8 +168,8 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data):
                               col_num,
                               gt_where=gt_where_seq,
                               gt_cond=gt_cond_seq,
-                              gt_sel=gt_sel_seq,
-                              gt_sel_num=gt_sel_num)
+                              gt_sel=gt_sel_seq, # which column select 
+                              gt_sel_num=gt_sel_num) # select column count 
         # sel_num_score, sel_col_score, sel_agg_score, cond_score, cond_rela_score
 
         # compute loss

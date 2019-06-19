@@ -1,3 +1,4 @@
+# -*- coding: UTF-8 -*-
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
@@ -61,24 +62,32 @@ class SQLNet(nn.Module):
             record = []
             record_cond = []
             for cond in ans:
-                # the given condition is not in question sequence 
-                if cond[2] not in temp_q:
+                #cond column in train cond[2]  may not in querys 
+                if cond[2] not in temp_q: 
                     record.append((False, cond[2]))
                 else:
                     record.append((True, cond[2]))
             for idx, item in enumerate(record):
                 temp_ret_seq = []
-                if item[0]: 
+                if item[0]: # cond column name  is in querys 
                     temp_ret_seq.append(0)
-                    temp_ret_seq.extend(list(range(temp_q.index(item[1]) + 1, temp_q.index(item[1]) + len(item[1]) + 1)))
+                    temp_ret_seq.extend(list(range(temp_q.index(item[1]) + 1, 
+                                                    temp_q.index(item[1]) + len(item[1]) + 1)))
                     temp_ret_seq.append(len(cur_q) - 1)
-                else:
+                else: # cond column name is not in querys 
                     temp_ret_seq.append([0, len(cur_q) - 1])
                 record_cond.append(temp_ret_seq)
             ret_seq.append(record_cond)
         return ret_seq
 
-    def forward(self, q, col, col_num, gt_where = None, gt_cond=None, reinforce=False, gt_sel=None, gt_sel_num=None):
+    def forward(self, q, col, col_num, gt_where=None, gt_cond=None, reinforce=False, gt_sel=None, gt_sel_num=None):
+        '''
+        q: char-based question 
+        col: header of table 
+        col_num: number of headers in one table
+        gt_where: record the start_pos and end_pos of where condition column in the question sequence
+        gt_cond: ground truth of conds
+        '''
         B = len(q)
 
         sel_num_score = None

@@ -26,6 +26,10 @@ class WordEmbedding(nn.Module):
 
 
     def gen_x_batch(self, q, col):
+        '''
+        q: char-based questions 
+        col: header of table 
+        '''
         B = len(q)
         val_embs = []
         val_len = np.zeros(B, dtype=np.int64)
@@ -41,7 +45,7 @@ class WordEmbedding(nn.Module):
                     val_embs.append([np.zeros(self.N_word, dtype=np.float32)] + q_val + [np.zeros(self.N_word, dtype=np.float32)])  #<BEG> and <END>
                 val_len[i] = 1 + len(q_val) + 1
             else:
-                one_col_all = [x for toks in one_col for x in toks+[',']]
+                one_col_all = [x for toks in one_col for x in toks + [',']]
                 if self.trainable:
                     col_val = map(lambda x:self.w2i.get(x, 0), one_col_all)
                     val_embs.append( [0 for _ in self.SQL_TOK] + col_val + [0] + q_val+ [0])

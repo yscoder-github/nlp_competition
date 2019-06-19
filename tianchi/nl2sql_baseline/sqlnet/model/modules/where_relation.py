@@ -6,6 +6,25 @@ from torch.autograd import Variable
 import numpy as np
 from net_utils import run_lstm, col_name_encode
 
+def pickle_for_debug(x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num):
+    '''
+      yinshuai 
+    '''
+    import pickle
+    import os 
+    debug_file_path = '/media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/debug'
+    with open(os.path.join(debug_file_path, 'where.pkl'), 'wb') as f:
+        dic = {'x_emb_var':x_emb_var
+               ,'x_len': x_len
+               ,'col_inp_var':col_inp_var
+               ,'col_name_len':col_name_len
+               , 'col_len': col_len
+               , 'col_num':col_num
+        }       
+        pickle.dump(dic, f)
+
+
+
 class WhereRelationPredictor(nn.Module):
     def __init__(self, N_word, N_h, N_depth, use_ca):
         super(WhereRelationPredictor, self).__init__()
@@ -53,7 +72,15 @@ class WhereRelationPredictor(nn.Module):
 
         where_rela_num = (h_enc * att_val.unsqueeze(2).expand_as(h_enc)).sum(1)
         where_rela_score = self.where_rela_out(where_rela_num)
+
+
+        # shuai for test folllow line 
+        pickle_for_debug( x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num)
         return where_rela_score
+
+### Just for test: 
+
+
 
 
 
