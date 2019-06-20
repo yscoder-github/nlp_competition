@@ -114,15 +114,18 @@ class SQLNet(nn.Module):
             cond_score = self.cond_pred(x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num, gt_where, gt_cond, reinforce=reinforce)
             where_rela_score = None
         else:
+            # x_emb_var: word embbeding representation of each question in one batch  [batch_size, n_step, hidden_size]
+            # x_len: each question length in one batch [batch_size, ]
             x_emb_var, x_len = self.embed_layer.gen_x_batch(q, col)
+
             col_inp_var, col_name_len, col_len = self.embed_layer.gen_col_batch(col)
             sel_num_score = self.sel_num(x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num)
             # x_emb_var: embedding of each question
             # x_len: length of each question
-            # col_inp_var: embedding of each header
-            # col_name_len: length of each header
-            # col_len: number of headers in each table, array type
-            # col_num: number of headers in each table, list type
+            # col_inp_var: embedding of each column(header) [batch_size(123==column counts), max_length_of_column, hidden_size]
+            # col_name_len: length of each header [batch_size(123==column counts),]
+            # col_len: number of headers(columns) in each table, array type [batch_size(16), ]
+            # col_num: number of headers(columns) in each table, list type  [batch_size(16), ]
             if gt_sel_num:
                 pr_sel_num = gt_sel_num
             else:

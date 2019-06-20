@@ -31,7 +31,14 @@ class SelPredictor(nn.Module):
 
     def forward(self, x_emb_var, x_len, col_inp_var,
             col_name_len, col_len, col_num):
-        # Based on number of selections to predict select-column
+        '''
+        Based on number of selections to predict select-column
+        x_emb_var: embedding of each question
+        col_inp_var: embedding of each header
+        col_name_len: length of each header
+        col_len: number of headers in each table, array type
+        col_num: number of headers in each table, list type
+        '''
         B = len(x_emb_var)
         max_x_len = max(x_len)
 

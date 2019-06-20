@@ -157,9 +157,10 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data):
         # q_seq: char-based sequence of question
         # gt_sel_num: number of selected columns and aggregation functions
         # col_seq: char-based column name, it contains all columns of one table
-        # col_num: number of headers in one table,
+        # col_num: count of columns  in one table (calc for header field)
         # ans_seq: (sel, number of conds, sel list in conds, op list in conds)
         # gt_cond_seq: ground truth of conds
+        # gt_sel_seq: ground truth of select column index in conds 
         # gt_where_seq: record the start_pos and end_pos of where condition column in the question sequence
         gt_where_seq = model.generate_gt_where_seq_test(q_seq, gt_cond_seq)
         gt_sel_seq = [x[1] for x in ans_seq]

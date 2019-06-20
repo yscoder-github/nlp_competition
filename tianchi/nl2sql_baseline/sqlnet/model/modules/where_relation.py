@@ -75,7 +75,7 @@ class WhereRelationPredictor(nn.Module):
 
 
         # shuai for test folllow line 
-        pickle_for_debug( x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num)
+        # pickle_for_debug( x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num)
         return where_rela_score
 
 ### Just for test: 
