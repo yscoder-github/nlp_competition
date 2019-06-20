@@ -33,17 +33,19 @@ class SelPredictor(nn.Module):
             col_name_len, col_len, col_num):
         '''
         Based on number of selections to predict select-column
-        x_emb_var: embedding of each question
-        col_inp_var: embedding of each header
-        col_name_len: length of each header
-        col_len: number of headers in each table, array type
-        col_num: number of headers in each table, list type
+        input: 
+            x_emb_var: embedding of each question
+            col_inp_var: embedding of each header
+            col_name_len: length of each header
+            col_len: number of headers in each table, array type
+            col_num: number of headers in each table, list type
+        
         '''
         B = len(x_emb_var)
         max_x_len = max(x_len)
 
         e_col, _ = col_name_encode(col_inp_var, col_name_len, col_len, self.sel_col_name_enc) # [bs, col_num, hid]
-        h_enc, _ = run_lstm(self.sel_lstm, x_emb_var, x_len) # [bs, seq_len, hid]
+        h_enc, _ = run_lstm(self.sel_lstm, x_emb_var, x_len) # [bs, seq_len, hid]  h_enc is output, used for attention object 
 
         att_val = torch.bmm(e_col, self.sel_att(h_enc).transpose(1, 2)) # [bs, col_num, seq_len]
         for idx, num in enumerate(x_len):

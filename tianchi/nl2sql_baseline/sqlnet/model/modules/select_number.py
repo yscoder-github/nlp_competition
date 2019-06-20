@@ -18,7 +18,7 @@ class SelNumPredictor(nn.Module):
         self.sel_num_att = nn.Linear(N_h, 1)
         self.sel_num_col_att = nn.Linear(N_h, 1)
         self.sel_num_out = nn.Sequential(nn.Linear(N_h, N_h),
-                                         nn.Tanh(), nn.Linear(N_h,4))
+                                         nn.Tanh(), nn.Linear(N_h, 4))
         self.softmax = nn.Softmax(dim=-1)
         self.sel_num_col2hid1 = nn.Linear(N_h, 2 * N_h)
         self.sel_num_col2hid2 = nn.Linear(N_h, 2 * N_h)

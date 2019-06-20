@@ -82,11 +82,12 @@ class SQLNet(nn.Module):
 
     def forward(self, q, col, col_num, gt_where=None, gt_cond=None, reinforce=False, gt_sel=None, gt_sel_num=None):
         '''
-        q: char-based question 
-        col: header of table 
-        col_num: number of headers in one table
-        gt_where: record the start_pos and end_pos of where condition column in the question sequence
-        gt_cond: ground truth of conds
+        input:
+            q: char-based question 
+            col: header of table 
+            col_num: number of headers in one table
+            gt_where: record the start_pos and end_pos of where condition column in the question sequence
+            gt_cond: ground truth of conds
         '''
         B = len(q)
 
@@ -119,7 +120,7 @@ class SQLNet(nn.Module):
             x_emb_var, x_len = self.embed_layer.gen_x_batch(q, col)
 
             col_inp_var, col_name_len, col_len = self.embed_layer.gen_col_batch(col)
-            sel_num_score = self.sel_num(x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num)
+            sel_num_score = self.sel_num.forward(x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num) # shuai: add forward for debug 
             # x_emb_var: embedding of each question
             # x_len: length of each question
             # col_inp_var: embedding of each column(header) [batch_size(123==column counts), max_length_of_column, hidden_size]
@@ -147,6 +148,9 @@ class SQLNet(nn.Module):
         return (sel_num_score, sel_score, agg_score, cond_score, where_rela_score)
 
     def loss(self, score, truth_num, gt_where):
+        '''
+        
+        '''
         sel_num_score, sel_score, agg_score, cond_score, where_rela_score = score
 
         B = len(truth_num)
@@ -163,7 +167,7 @@ class SQLNet(nn.Module):
 
         # Evaluate select column
         T = len(sel_score[0])
-        truth_prob = np.zeros((B,T), dtype=np.float32)
+        truth_prob = np.zeros((B, T), dtype=np.float32)
         for b in range(B):
             truth_prob[b][list(truth_num[b][1])] = 1
         data = torch.from_numpy(truth_prob)
@@ -220,8 +224,8 @@ class SQLNet(nn.Module):
         sigm = nn.Sigmoid()
         cond_col_prob = sigm(cond_col_score)
         bce_loss = -torch.mean(
-            3*(cond_col_truth_var * torch.log(cond_col_prob+1e-10)) +
-            (1-cond_col_truth_var) * torch.log(1-cond_col_prob+1e-10) )
+            3 * (cond_col_truth_var * torch.log(cond_col_prob + 1e-10)) +
+            (1 - cond_col_truth_var) * torch.log(1-cond_col_prob + 1e-10) )
         loss += bce_loss
 
         # Evaluate the operator of conditions
@@ -252,7 +256,7 @@ class SQLNet(nn.Module):
                     cond_str_truth_var = Variable(data.cuda())
                 else:
                     cond_str_truth_var = Variable(data)
-                str_end = len(cond_str_truth)-1
+                str_end = len(cond_str_truth) - 1
                 cond_str_pred = cond_str_score[b, idx, :str_end]
                 loss += (self.CE(cond_str_pred, cond_str_truth_var) \
                         / (len(gt_where) * len(gt_where[b])))

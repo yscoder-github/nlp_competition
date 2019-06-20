@@ -90,7 +90,7 @@ class WordEmbedding(nn.Module):
         output: 
                name_inp_var: word embedding of columns [batch_size(not question batch_size,but column), max_len(column),hidden_size]
                name_len: column length, eg: name_len = length('容积率')=3 
-               col_len:  count of columns in each table   [batch_size, ]
+               col_len:  count of columns in each table   [batch_size(not 16), ]
         '''
         ret = []
         col_len = np.zeros(len(cols), dtype=np.int64)
@@ -108,8 +108,8 @@ class WordEmbedding(nn.Module):
         input: 
             str_list: all columns in one batch, not one table 
                 eg:  [[u'图', u'书', u'编', u'号'], [u'S', u'S', u'号'], [u'书', u'名'], [u'作', u'者'], [u'出', u'版', u'社'], [u'出', u'版', u'日', u'期'], [u'i', u's', u'b', u'n'], [u'内', u'容', u'简', u'介'], [u'分', u'类', u'名', u'称'], [u'商', u'户', u'名', u'称'], [u'门', u'店', u'名', u'称'], [u'商', u'户', u'营', u'业', u'地', u'址'], [u'区', u'号'], [u'商', u'户', u'咨', u'询', u'电', u'话'], ...]
-        output:  val_inp_var: Todo
-                 val_len: Todo 
+        output:  val_inp_var: each  column  embedding    [batch_size(not 16), max_len(n_step), hidden_size]
+                 val_len: each column length  [batch_size(not 16)]
             
         '''
         # at here B<> 16 and it equals to column counts in one batch 
@@ -131,7 +131,7 @@ class WordEmbedding(nn.Module):
             val_tok_array = np.zeros((B, max_len), dtype=np.int64)
             for i in range(B):
                 for t in range(len(val_embs[i])):
-                    val_tok_array[i,t] = val_embs[i][t]
+                    val_tok_array[i, t] = val_embs[i][t]
             val_tok = torch.from_numpy(val_tok_array)
             if self.gpu:
                 val_tok = val_tok.cuda()
