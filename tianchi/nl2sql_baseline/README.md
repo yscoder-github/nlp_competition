@@ -1,3 +1,5 @@
+git checkout  -b python3  origin/python3
+
 ## More Intro https://new.qq.com/rain/a/20190602A089LI
 
 ## Introduction
