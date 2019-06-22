@@ -28,6 +28,14 @@ class SelNumPredictor(nn.Module):
             print "Using column attention on select number predicting"
 
     def forward(self, x_emb_var, x_len, col_inp_var, col_name_len, col_len, col_num):
+        '''
+            input: 
+                
+                  col_inp_var: [col_batch_size(not 16), col_max_length, hidden_size(300)]
+                  col_name_len: [col_batch_size,]
+                  col_len(col_num): [batch_size(16), count of columns in current_train_table]
+
+        '''
         B = len(x_len)
         max_x_len = max(x_len)
 
@@ -36,6 +44,15 @@ class SelNumPredictor(nn.Module):
         # Then run the LSTM and predict select number
         e_num_col, col_num = col_name_encode(col_inp_var, col_name_len,
                                              col_len, self.sel_num_lstm)
+
+
+
+        test1, test2 = col_name_encode(col_inp_var, col_name_len,
+                                             col_len, self.sel_num_lstm)
+
+
+                                             
+                                                                                  
         num_col_att_val = self.sel_num_col_att(e_num_col).squeeze()
         for idx, num in enumerate(col_num):
             if num < max(col_num):

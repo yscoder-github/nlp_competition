@@ -10,7 +10,7 @@ def run_lstm(lstm, inp, inp_len, hidden=None):
        This requires to first sort the input according to its length.
     '''
     sort_perm = np.array(sorted(range(len(inp_len)),
-        key=lambda k:inp_len[k], reverse=True))
+        key=lambda k:inp_len[k], reverse=True))  # sort_perm saved index of inpt order by inp_len[i]
     sort_inp_len = inp_len[sort_perm]
     sort_perm_inv = np.argsort(sort_perm)
     if inp.is_cuda:
@@ -46,8 +46,13 @@ def col_name_encode(name_inp_var, name_len, col_len, enc_lstm):
 
     st = 0
     for idx, cur_len in enumerate(col_len):
-        ret[idx, :cur_len] = name_out.data[st:st+cur_len]
+        ret[idx, :cur_len] = name_out.data[st:st + cur_len]
         st += cur_len
     ret_var = Variable(ret)
 
     return ret_var, col_len
+
+
+# yinshuai exersise 
+if __name__ == "__main__":
+    inp_len = np.array([22, 40, 38, 14, 26, 29, 38, 49, 25, 20, 26, 20, 20, 50, 19, 17])

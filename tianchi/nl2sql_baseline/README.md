@@ -199,3 +199,53 @@ Epoch 3
  81%|████████  | 223/275 [00:27<00:05,  9.03it/s]
 
 ``` 
+
+# Code intro: 
+### code from selection_predict.py 
+``` python
+    def forward(self, x_emb_var, x_len, col_inp_var,
+            col_name_len, col_len, col_num):
+        '''
+        Based on number of selections to predict select-column
+        input: 
+            x_emb_var: embedding of each question
+            col_inp_var: embedding of each header
+            col_name_len: length of each header
+            col_len: number of headers in each table, array type
+            col_num: number of headers in each table, list type
+        
+        '''
+        B = len(x_emb_var)
+        max_x_len = max(x_len)
+
+        e_col, _ = col_name_encode(col_inp_var, col_name_len, col_len, self.sel_col_name_enc) # [bs, col_num, hid]
+        h_enc, _ = run_lstm(self.sel_lstm, x_emb_var, x_len) # [bs, seq_len, hid]  h_enc is output, used for attention object 
+        # e_col: [batch_size(16), max_num_of_col_in_train_tab, hidden_size(100)]
+        # h_enc: [batch_size(16), max_len_of_question, hidden_size(100)]
+        # att_val: [bs[16], max_num_of_col_in_train_tab, max_len_of_question]
+        att_val = torch.bmm(e_col, self.sel_att(h_enc).transpose(1, 2)) # [bs, col_num, seq_len]
+        for idx, num in enumerate(x_len):
+            if num < max_x_len:
+                # column hidden status will have new value when attention on the question,while the some part of 
+                # question is of no use on attention calculate.
+                att_val[idx, :, num:] = -100
+        att = self.softmax(att_val.view((-1, max_x_len))).view(B, -1, max_x_len)
+        K_sel_expand = (h_enc.unsqueeze(1) * att.unsqueeze(3)).sum(2)
+
+        sel_score = self.sel_out( self.sel_out_K(K_sel_expand) + self.sel_out_col(e_col) ).squeeze()
+        max_col_num = max(col_num)
+        for idx, num in enumerate(col_num):
+            if num < max_col_num:
+                sel_score[idx, num:] = -100
+
+        return sel_score
+``` 
+上面代码为经典的seq2seq:   
+Encoder:    
+         Input: question input embedding    
+                 hidden part for attention: h_enc
+        
+Decoder:    
+ Input: all columns in current train table 
+ ouptut: ( all column hidden state + attention value with encoder(question hidden state)) 
+   
