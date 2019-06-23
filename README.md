@@ -10,11 +10,15 @@ Some metrics get on this competition: To Do
 ## TianChi 
 Todo
 
+   
 
 
-## FlyAi
-To do
+## [FlyAi]( https://www.flyai.com)
+
+[1.社交网站消息内容分类]( https://www.flyai.com/d/DisasterDet)    
  
+ code path /flyai/DisasterDet_FlyAI/
+
 
 
 ## Semeval
