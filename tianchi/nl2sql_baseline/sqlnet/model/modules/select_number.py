@@ -44,15 +44,7 @@ class SelNumPredictor(nn.Module):
         # Then run the LSTM and predict select number
         e_num_col, col_num = col_name_encode(col_inp_var, col_name_len,
                                              col_len, self.sel_num_lstm)
-
-
-
-        test1, test2 = col_name_encode(col_inp_var, col_name_len,
-                                             col_len, self.sel_num_lstm)
-
-
-                                             
-                                                                                  
+                                                       
         num_col_att_val = self.sel_num_col_att(e_num_col).squeeze()
         for idx, num in enumerate(col_num):
             if num < max(col_num):

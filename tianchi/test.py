@@ -1,10 +1,28 @@
 import numpy as np
-inp_len = np.array([22, 40, 38, 14, 26, 29, 38, 49, 25, 20, 26, 20, 20, 50, 19, 17])
-print(inp_len)
-sort_perm = np.array(sorted(range(len(inp_len)), key=lambda k: inp_len[k], reverse=True))
-print(sort_perm)
-sort_inp_len = inp_len[sort_perm]
-sort_perm_inv = np.argsort(sort_perm)
-print(sort_perm_inv)
-print(inp_len[sort_perm_inv])
+import wordfreq
+vocab = {}
+token_id = 1
+lengths = []
+
+f = [
+     'To the world you may be one person, but to one person you may be the world.',
+     'Never frown, even when you are sad, because you never know who is falling in love with your smile. ',\
+     'We met at the wrong time, but separated at the right time. The most urgent is to take the most beautiful scenery; the deepest wound was the most real emotions.'
+]
+for l in f:
+    tokens = wordfreq.tokenize(l.strip(), 'en')
+    lengths.append(len(tokens))
+    for t in tokens:
+        if t not in vocab:
+            vocab[t] = token_id
+            token_id += 1
+
+x = np.zeros((len(lengths), max(lengths)))
+l_no = 0
+with open('test.txt', 'r') as f:
+    for l in f:
+        tokens = wordfreq.tokenize(l.strip(), 'en')
+        for i in range(len(tokens)):
+            x[l_no, i] = vocab[tokens[i]]
+        l_no += 1
 

@@ -1,5 +1,5 @@
 {
-    "python.pythonPath": "/usr/bin/python3",
+    "python.pythonPath": "/home/yinshuai/anaconda3/envs/python27/bin/python",
     "debug.console.fontSize": 9,
     "terminal.integrated.fontSize": 9,
     "markdown.preview.fontSize": 9,

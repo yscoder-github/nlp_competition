@@ -10,9 +10,14 @@ The model decouples the task of generating a whole SQL into several sub-tasks, i
 
 Simple model structure shows here, implementation details could refer to the origin <a href="https://arxiv.org/abs/1711.04436">paper</a>.
 
-<div align="middle"><img src="https://github.com/ZhuiyiTechnology/nl2sql_baseline/blob/master/img/detailed_structure.png"width="80%" ></div>
+<div align="middle"><img src="./img/detailed_structure.png"width="80%" ></div>
 
 The difference between SQLNet and this baseline model is, Select-Number and Where-Relationship sub-tasks are added to adapt this Chinese NL2SQL dataset better.
+
+The follow picture may helpful with url　[helpful link](https://zhuanlan.zhihu.com/p/69777035):   
+<div align="middle"><img src="./img/solution.jpg"width="80%" ></div>
+
+
 
 ## Dependencies
 
@@ -66,7 +71,7 @@ We found the main challenges of this datasets containing poor condition value pr
 
 Correspondingly, this baseline model achieves only 77% accuracy on condition column and 62% accuracy on condition value respectively even on the training set, and the overall logic form is only around 50% as well, indicating these problems are challenging for contestants to solve.
 
-<div align="middle"><img src="https://github.com/ZhuiyiTechnology/nl2sql_baseline/blob/master/img/trainset_behavior.png"width="80%" ></div>
+<div align="middle"><img src="./img/trainset_behavior.png"width="80%" ></div>
 
 ## Related resources:
 https://github.com/salesforce/WikiSQL
