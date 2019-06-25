@@ -254,3 +254,17 @@ Decoder:
  Input: all columns in current train table 
  ouptut: ( all column hidden state + attention value with encoder(question hidden state)) 
    
+
+
+### Some tricks :
+##### Data augments 
+ One issue of such an approach is that different SQL queries may be equivalent to each other due to commutativity and associativity. For example, consider the following two
+queries:
+``` sql 
+SELECT result 
+WHERE score=‘1-0’ AND goal=16
+
+SELECT result
+WHERE goal=16 AND score=‘1-0’
+``` 
+The order of the two constraints in the WHERE clause  **does not affect the execution results of the query**, but syntactically(句法上), these two are considered as different queries. 
