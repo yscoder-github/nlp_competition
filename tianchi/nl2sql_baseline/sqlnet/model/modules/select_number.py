@@ -43,7 +43,7 @@ class SelNumPredictor(nn.Module):
         # First use column embeddings to calculate the initial hidden unit
         # Then run the LSTM and predict select number
         e_num_col, col_num = col_name_encode(col_inp_var, col_name_len,
-                                             col_len, self.sel_num_lstm)
+                                             col_len, self.sel_num_lstm) # current train table column encoder 
                                                        
         num_col_att_val = self.sel_num_col_att(e_num_col).squeeze()
         for idx, num in enumerate(col_num):
@@ -51,8 +51,8 @@ class SelNumPredictor(nn.Module):
                 num_col_att_val[idx, num:] = -1000000
         num_col_att = self.softmax(num_col_att_val)
         K_num_col = (e_num_col * num_col_att.unsqueeze(2)).sum(1)
-        sel_num_h1 = self.sel_num_col2hid1(K_num_col).view(B, 4, self.N_h/2).transpose(0,1).contiguous()
-        sel_num_h2 = self.sel_num_col2hid2(K_num_col).view(B, 4, self.N_h/2).transpose(0,1).contiguous()
+        sel_num_h1 = self.sel_num_col2hid1(K_num_col).view(B, 4, self.N_h/2).transpose(0, 1).contiguous()
+        sel_num_h2 = self.sel_num_col2hid2(K_num_col).view(B, 4, self.N_h/2).transpose(0, 1).contiguous()
 
         h_num_enc, _ = run_lstm(self.sel_num_lstm, x_emb_var, x_len,
                                 hidden=(sel_num_h1, sel_num_h2))

@@ -87,6 +87,7 @@ class WordEmbedding(nn.Module):
         input: 
                 cols: columns in table(get from header)
                     eg:[['索', '书', '号'], ['书', '名'], ['编', '著', '者'], ['出', '版', '社'], ['出', '版', '时', '间'], ['册', '数']]
+                    [batch_size(16), all_columns_in_current_train_table]
         output: 
                name_inp_var: word embedding of columns [batch_size(not question batch_size,but column), max_len(column),hidden_size]
                name_len: column length, eg: name_len = length('容积率')=3 
