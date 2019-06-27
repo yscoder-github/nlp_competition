@@ -40,7 +40,7 @@ class AggPredictor(nn.Module):
 
         col_emb = []
         for b in range(B):
-            cur_col_emb = torch.stack([e_col[b,x] for x in gt_sel[b]] + [e_col[b,0]] * (4-len(gt_sel[b])))
+            cur_col_emb = torch.stack([e_col[b, x] for x in gt_sel[b]] + [e_col[b, 0]] * (4 - len(gt_sel[b])))
             col_emb.append(cur_col_emb)
         col_emb = torch.stack(col_emb)
 
