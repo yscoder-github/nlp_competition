@@ -34,7 +34,7 @@ if __name__ == '__main__':
 
     # for debug shuai 
     args.ca = True
-    args.gpu = False
+    args.gpu = True
     # debug end shuai 
     n_word = 300
     if args.toy:

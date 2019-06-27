@@ -55,10 +55,10 @@ def load_dataset(toy=False, use_small=False, mode='train'):
 
     print "Loading dataset"
     base_dir = '/media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql'
-    dev_sql, dev_table = load_data(os.path.join(base_dir, 'dev.json'),
-                                   os.path.join(base_dir, 'dev.tables.json'),
+    dev_sql, dev_table = load_data(os.path.join(base_dir, 'val.json'),
+                                   os.path.join(base_dir, 'val.tables.json'),
                                    use_small=use_small)
-    dev_db = 'data/dev.db'
+    dev_db = 'data/val.db'
     if mode == 'train':
         train_sql, train_table = load_data(
             os.path.join(base_dir, 'train.json'),
@@ -73,6 +73,9 @@ def load_dataset(toy=False, use_small=False, mode='train'):
                                          use_small=use_small)
         test_db = 'data/test.db'
         return dev_sql, dev_table, dev_db, test_sql, test_table, test_db
+
+
+
 
 
 def to_batch_seq(sql_data, table_data, idxes, st, ed, ret_vis_data=False):
