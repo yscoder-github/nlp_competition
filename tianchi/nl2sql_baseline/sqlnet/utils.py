@@ -58,7 +58,7 @@ def load_dataset(toy=False, use_small=False, mode='train'):
     dev_sql, dev_table = load_data(os.path.join(base_dir, 'val.json'),
                                    os.path.join(base_dir, 'val.tables.json'),
                                    use_small=use_small)
-    dev_db = 'data/val.db'
+    dev_db = os.path.join(base_dir, 'val.db')
     if mode == 'train':
         train_sql, train_table = load_data(
             os.path.join(base_dir, 'train.json'),

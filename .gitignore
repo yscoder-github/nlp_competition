@@ -6,7 +6,7 @@
 *.pack
 *.json 
 *.pyc 
-./tianchi/nl2sql_baseline/saved_model/best_model
+./tianchi/nl2sql_baseline/saved_model/best_model/* 
 ./tianchi/nl2sql_baseline/data/char_embedding
 .vscode
 *.pdf 

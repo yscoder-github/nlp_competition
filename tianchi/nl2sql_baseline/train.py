@@ -7,7 +7,7 @@ import argparse
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--bs', type=int, default=16, help='Batch size')
+    parser.add_argument('--bs', type=int, default=64, help='Batch size')
     parser.add_argument('--epoch', type=int, default=100, help='Epoch number')
     parser.add_argument('--gpu',
                         action='store_true',
