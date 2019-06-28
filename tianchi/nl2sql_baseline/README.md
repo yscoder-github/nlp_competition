@@ -1124,3 +1124,53 @@ Best val acc: (0.9897634212920837, 0.8873976342129208, 0.9695177434030937, 0.918
 On epoch individually (71, 74, 23, 62, 92, 49, 92)
 
 ``` 
+
+Test method1: using baseline, bs=64 , using column attention
+``` python 
+(python27) yinshuai@yinshuai-pc:~/桌面/nlp/nlp_competition/tianchi/nl2sql_baseline$ python2.7 test.py  
+Loading dataset
+Loaded 4396 data from /media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/val.json
+Loaded 1197 data from /media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/val.tables.json
+Loaded 4086 data from /media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/test.json
+Loaded 1102 data from /media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/test.tables.json
+Loading word embedding from /media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/char_embedding
+Using fixed embedding
+Using column attention on select number predicting
+Using column attention on selection predicting
+Using column attention on aggregator predicting
+Using column attention on where predicting
+Using column attention on where relation predicting
+Loading from saved_model/best_model
+Loaded model from saved_model/best_model
+100%|██████████| 69/69 [00:21<00:00,  3.20it/s]
+Dev Logic Form Accuracy: 0.303, Execution Accuracy: 0.417
+Start to predict test set
+100%|██████████| 64/64 [00:18<00:00,  3.61it/s]
+Output path of prediction result is /media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/output_isbaseline_bs64_isca.json
+
+``` 
+
+Test method2: Test method1: using baseline, bs=32 , using column attention
+``` python 
+Loading dataset
+Loaded 4396 data from /media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/val.json
+Loaded 1197 data from /media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/val.tables.json
+Loaded 4086 data from /media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/test.json
+Loaded 1102 data from /media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/test.tables.json
+Loading word embedding from /media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/char_embedding
+Using fixed embedding
+Using column attention on select number predicting
+Using column attention on selection predicting
+Using column attention on aggregator predicting
+Using column attention on where predicting
+Using column attention on where relation predicting
+Loading from saved_model/best_model
+Loaded model from saved_model/best_model
+100%|██████████| 69/69 [00:22<00:00,  3.57it/s]
+Dev Logic Form Accuracy: 0.318, Execution Accuracy: 0.427
+Start to predict test set
+100%|██████████| 64/64 [00:16<00:00,  3.92it/s]
+Output path of prediction result is /media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/output_isbaseline_bs32_isca.json
+
+
+``` 

@@ -7,7 +7,7 @@ import argparse
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
-    parser.add_argument('--bs', type=int, default=64, help='Batch size')
+    parser.add_argument('--bs', type=int, default=32, help='Batch size')
     parser.add_argument('--epoch', type=int, default=100, help='Epoch number')
     parser.add_argument('--gpu',
                         action='store_true',
@@ -29,7 +29,6 @@ if __name__ == '__main__':
                         default='',
                         help='Path of save experiment log')
     args = parser.parse_args()
-
 
 
     # for debug shuai 
@@ -64,7 +63,7 @@ if __name__ == '__main__':
                                  weight_decay=0)
 
     if args.restore:
-        model_path = 'saved_model/best_model'
+        model_path = 'saved_model/best_model_32'
         print "Loading trained model from %s" % model_path
         model.load_state_dict(torch.load(model_path))
 

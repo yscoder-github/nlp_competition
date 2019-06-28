@@ -185,7 +185,6 @@ def epoch_train(model, optimizer, batch_size, sql_data, table_data):
     return cum_loss / len(sql_data)
 
 def predict_test(model, batch_size, sql_data, table_data, output_path):
-    engine = DBEngine(db_path)
     model.eval()
     perm = list(range(len(sql_data)))
     fw = open(output_path, 'w')
