@@ -21,7 +21,7 @@ bert_config_file = data_root + 'bert_config.json'
 bert_config = modeling.BertConfig.from_json_file(bert_config_file)
 init_checkpoint = data_root + 'bert_model.ckpt'
 bert_vocab_file = data_root + 'vocab.txt'
-bert_vocab_En_file = '/media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/uncased_L-12_H-768_A-12/vocab.txt'
+bert_vocab_En_file = './bert/weight/uncased_L-12_H-768_A-12/vocab.txt'
 
 # graph
 input_ids = tf.placeholder(tf.int32, shape=[None, None], name='input_ids')
@@ -58,6 +58,5 @@ with tf.Session() as sess:
     last, last2 = sess.run([output_layer, output_layer_pooled], feed_dict=fd)
     print('last shape:{}, last2 shape: {}'.format(last.shape, last2.shape))
     pass
-
 
 
