@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-
-
 class Transformation:
     '''
     处理训练数据的类，某些情况下需要对训练的数据再一次的处理。
