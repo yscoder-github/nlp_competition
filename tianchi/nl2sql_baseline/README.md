@@ -1174,3 +1174,7 @@ Output path of prediction result is /media/yinshuai/d8644f6c-5a97-4e12-909b-b61d
 
 
 ``` 
+
+考虑可以优化的方案： 
+1. 针对于attention 
+2. 采用bert 
