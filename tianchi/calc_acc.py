@@ -33,24 +33,38 @@ def execute_accuracy(query_gt, pred_queries, table_ids, db_path, sql_data):
 
 # print(execute_accuracy(query_gt, pred_queries, table_ids, db_path, sql_data))
 
+import os
+import json 
+data_path = './data'
+fh_where_val = open(os.path.join(data_path, 'where_val_error.log'), 'w')
+fh_where_oper = open(os.path.join(data_path, 'where_oper_error.log'), 'w')
+fh_where_col = open(os.path.join(data_path, 'where_col_error.log'), 'w')
+fh_where_cnt = open(os.path.join(data_path, 'where_cnt_error.log'), 'w')
 
 
-# pred_queries = [{"agg": [0], "cond_conn_op": 1, "sel": [0], "conds": [[2, 0, "50"], [3, 0, "5"]]}]
-pred_queries = [{"agg": [0], "cond_conn_op": 1, "sel": [1], "conds": [[2, 0, "50"], [3, 0, "5"]]}]
-gt_queries =  [{"agg": [0], "cond_conn_op": 1, "sel": [0], "conds": [[2, 0, "50"], [3, 0, "5"]]}]
-def check_part_acc(pred_queries, gt_queries):
+
+# # pred_queries = [{"agg": [0], "cond_conn_op": 1, "sel": [0], "conds": [[2, 0, "50"], [3, 0, "5"]]}]
+# pred_queries = [{"agg": [0], "cond_conn_op": 1, "sel": [1], "conds": [[2, 0, "50"], [3, 0, "5"]]}]
+
+# pred_queries = [{"agg": [0], "cond_conn_op": 1, "sel": [1], "conds": [(2, 0, "50"), (3, 0, "5")]}] # for test 
+# gt_queries =  [{"agg": [0], "cond_conn_op": 1, "sel": [0], "conds": [[2, 0, "50"], [3, 0, "5"]]}]
+def check_part_acc( pred_queries):
     """
         判断各个组件的精确度
         param: 
                 pred_queries: array of query
                 gt_queries: array of query
+                data: data在这里主要是用作复盘
         ouput: xxx 
 
           
     """
     tot_err = sel_num_err = agg_err = sel_err = 0.0
     cond_num_err = cond_col_err = cond_op_err = cond_val_err = cond_rela_err = 0.0
-    for b, (pred_qry, gt_qry) in enumerate(zip(pred_queries, gt_queries)):
+    for query in pred_queries:
+        pred_qry = query['sql_pred']
+        gt_qry = query['sql']
+        # for easy test
         good = True
         sel_pred, agg_pred, where_rela_pred = pred_qry['sel'], pred_qry['agg'], pred_qry['cond_conn_op']
         sel_gt, agg_gt, where_rela_gt = gt_qry['sel'], gt_qry['agg'], gt_qry['cond_conn_op']
@@ -79,6 +93,8 @@ def check_part_acc(pred_queries, gt_queries):
         if len(cond_pred) != len(cond_gt):
             good = False
             cond_num_err += 1
+            fh_where_cnt.write(
+                        json.dumps(query, ensure_ascii=False).encode('utf-8') + '\n')
         else:
             cond_op_pred, cond_op_gt = {}, {}
             cond_val_pred, cond_val_gt = {}, {}
@@ -91,28 +107,35 @@ def check_part_acc(pred_queries, gt_queries):
             if set(cond_op_pred.keys()) != set(cond_op_gt.keys()):
                 cond_col_err += 1
                 good = False
+                fh_where_col.write(
+                        json.dumps(query, ensure_ascii=False).encode('utf-8') + '\n')
 
             where_op_pred = [cond_op_pred[x] for x in sorted(cond_op_pred.keys())]
             where_op_gt = [cond_op_gt[x] for x in sorted(cond_op_gt.keys())]
             if where_op_pred != where_op_gt:
                 cond_op_err += 1
                 good = False
+                fh_where_oper.write(
+                        json.dumps(query, ensure_ascii=False).encode('utf-8') + '\n')
 
             where_val_pred = [cond_val_pred[x] for x in sorted(cond_val_pred.keys())]
             where_val_gt = [cond_val_gt[x] for x in sorted(cond_val_gt.keys())]
             if where_val_pred != where_val_gt:
                 cond_val_err += 1
                 good = False
+                fh_where_val.write(
+                        json.dumps(query, ensure_ascii=False).encode('utf-8') + '\n')
+                
 
         if not good:
             tot_err += 1
-    q_len = len(gt_queries) # 获取所有的个数
+    q_len = len(pred_queries) # 获取所有的个数
     print('Sel-Num: %.3f, Sel-Col: %.3f, Sel-Agg: %.3f, W-Num: %.3f, W-Col: %.3f, W-Op: %.3f, W-Val: %.3f, W-Rel: %.3f, total_err: %.3f'
                 % (sel_num_err / q_len, sel_err / q_len, agg_err / q_len,
                    cond_num_err / q_len, cond_col_err / q_len, cond_op_err / q_len,
                    cond_val_err / q_len, cond_rela_err / q_len, tot_err / q_len))
     return np.array((sel_num_err, sel_err, agg_err, cond_num_err, cond_col_err, cond_op_err, cond_val_err, cond_rela_err)), tot_err  # 这里返回的都是总数哦，需要特殊处理成占比
-
 # res =  check_part_acc(pred_queries, gt_queries)
 # print(res)
+
 
