@@ -13,7 +13,7 @@ Todo
    
 
 
-## [FlyAi]( https://www.flyai.com)
+## [FlyAi]( https://www.flyai.com)(Free GPu source)
 
 [1.社交网站消息内容分类]( https://www.flyai.com/d/DisasterDet)    
  
