@@ -1,3 +1,0 @@
-flyai
-numpy
-tensorflow
