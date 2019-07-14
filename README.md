@@ -1,10 +1,9 @@
-# some nlp competitions 
+## some famous nlp competitions 
 
 ## Kaggle
 Competitions is as follows:  
 [Sentiment Analysis on Movie Reviews](https://www.kaggle.com/c/sentiment-analysis-on-movie-reviews)
 
-Some metrics get on this competition: To Do 
 
 
 ## TianChi 
@@ -13,12 +12,8 @@ Todo
    
 
 
-## [FlyAi]( https://www.flyai.com)(Free GPu source)
-
-[1.社交网站消息内容分类]( https://www.flyai.com/d/DisasterDet)    
- 
- code path /flyai/DisasterDet_FlyAI/
-
+## [FlyAi]( https://www.flyai.com)
+Todo 
 
 
 ## Semeval
