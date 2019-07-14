@@ -10,3 +10,5 @@
 ./tianchi/nl2sql_baseline/data/char_embedding
 .vscode
 *.pdf 
+.vscode 
+.idea 
