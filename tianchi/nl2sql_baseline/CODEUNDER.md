@@ -1060,8 +1060,9 @@ Start to predict test set
 Output path of prediction result is /media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/output_isbaseline_bs64_isca.json
 
 ``` 
+**分数0.3824** 
 
-Test method2: Test method1: using baseline, bs=32 , using column attention
+Test method2: using baseline, bs=32 , using column attention
 ``` python 
 Loading dataset
 Loaded 4396 data from /media/yinshuai/d8644f6c-5a97-4e12-909b-b61d2271b61c/nlp-datasets/nlp2sql/val.json
