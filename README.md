@@ -21,3 +21,7 @@ Todo
 
 ## ATEC
 Todo
+
+
+## 达观
+达观杯" 文本智能信息抽取挑战赛 https://biendata.com/competition/datagrand/data/
